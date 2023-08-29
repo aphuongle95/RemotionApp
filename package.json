@@ -1,0 +1,40 @@
+{
+  "name": "remotion-lottie-template",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://flowcode.ixorasolution.com",
+  "dependencies": {
+    "@remotion/player": "2.6.4",
+    "@types/react-dom": "17.0.11",
+    "lottie-web": "5.8.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "ts-node server.tsx"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react-color": "^3.0.4"
+  },
+  "keywords": [],
+  "description": ""
+}
