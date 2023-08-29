@@ -7,6 +7,8 @@ import {
 } from 'remotion';
 import React, {useMemo} from 'react';
 import {loadFont} from '@remotion/google-fonts/Roboto';
+import Draggable from "react-draggable";
+
 
 const {fontFamily} = loadFont();
 
@@ -63,12 +65,27 @@ export const Overlay: React.FC = () => {
 		};
 	}, [scale, outY, rotate]);
 
+	const draggableContainer: React.CSSProperties = {
+		backgroundColor: 'white',
+		borderRadius: 25,
+		right: 200,
+		top: 200,
+		padding: 40
+	}
 	return (
-		<AbsoluteFill>
-			<div style={container}>
-				<div style={title}>Look</div>
-				<div style={text}>I'm an overlay!</div>
-			</div>
-		</AbsoluteFill>
+			<AbsoluteFill>
+				<div style={container}>
+					<div style={title}>Look</div>
+					<div style={text}>I'm an overlay!</div>
+				</div>
+				<Draggable>
+					<div style={draggableContainer}>
+						<div style={title}>Look</div>
+						<div style={text}>I can now be moved around!</div>
+					</div>
+				</Draggable>
+			</AbsoluteFill>
+			
+		
 	);
 };
