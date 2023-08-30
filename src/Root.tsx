@@ -1,21 +1,43 @@
-import {Composition} from 'remotion';
+import {Composition, Sequence} from 'remotion';
 import {Overlay} from './Overlay';
+import {MyVideo} from './Video';
 
+const MyComposition = () => {
+	return (
+	  <>
+		<Sequence 
+			from={0}
+			durationInFrames={300}>
+				<MyVideo/>
+		</Sequence>
+		<Sequence from={10} durationInFrames={30}>
+			<Overlay />
+		</Sequence>
+	  </>
+	);
+  };
 
 export const RemotionRoot: React.FC = () => {
+ 
 	return (
-		<>
-			
-			
-			<Composition
-				id="Overlay"
-				component={Overlay}
-				durationInFrames={10}
-				fps={30}
-				width={1920}
-				height={1080}
-			/>
-			
-		</>
+		<div
+			style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+				}}
+			>
+			<>
+				<Composition
+					id="MyComposition"
+					component={MyComposition}
+					durationInFrames={180}
+					fps={30}
+					width={1920}
+					height={1080}
+				/>
+			</>
+		</div>
+		
 	);
 };

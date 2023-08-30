@@ -1,12 +1,13 @@
 import {
-	AbsoluteFill
+	AbsoluteFill, continueRender, delayRender
 } from 'remotion';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {loadFont} from '@remotion/google-fonts/Roboto';
-import Draggable from "react-draggable";
+import Draggable, { ControlPosition } from "react-draggable";
 import { Input } from '@mui/material';
 import { Button } from '@mui/material';
 import useUndoRedo from './useUndoRedo';
+
 
 const buttonContainer: React.CSSProperties = {
 	flexDirection: 'row',
@@ -37,6 +38,7 @@ const stateStyle: React.CSSProperties = {
 export const Overlay: React.FC = () => {
 
 	
+	
 	interface InteractiveText {
 		T: string;
 		X: number;
@@ -65,6 +67,14 @@ export const Overlay: React.FC = () => {
 
 	let startX = 0
 	let startY = 0
+	
+	const position: ControlPosition = useMemo( () => {
+		return {x: state.X, y: state.Y}
+	}, [state.X, state.Y])
+
+	const text: string = useMemo( () => {
+		return state.T
+	}, [state.T])
 
 	return (
 			<AbsoluteFill>
@@ -89,9 +99,9 @@ export const Overlay: React.FC = () => {
 							X: state.X + deltaX, 
 							Y: state.Y + deltaY, 
 						})
-				}} position={{x: state.X, y: state.Y}}>
+				}} position={position}>
 					<div style={draggableContainer}>
-					<Input style={stateStyle} value={state.T} onChange={(event) => {
+					<Input style={stateStyle} value={text} onChange={(event) => {
 						updatePresent({
 							T: event.target.value,
 							X: state.X,
