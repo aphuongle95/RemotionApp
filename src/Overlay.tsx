@@ -1,7 +1,7 @@
 import {
-	AbsoluteFill, continueRender, delayRender
+	AbsoluteFill
 } from 'remotion';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {loadFont} from '@remotion/google-fonts/Roboto';
 import Draggable, { ControlPosition } from "react-draggable";
 import { Input } from '@mui/material';
@@ -36,8 +36,6 @@ const stateStyle: React.CSSProperties = {
 
 
 export const Overlay: React.FC = () => {
-
-	
 	
 	interface InteractiveText {
 		T: string;
