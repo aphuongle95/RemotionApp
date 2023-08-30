@@ -5,8 +5,8 @@ import React from 'react';
 import {loadFont} from '@remotion/google-fonts/Roboto';
 import Draggable from "react-draggable";
 import { Input } from '@mui/material';
-import useUndoableState from "@jeremyling/react-use-undoable-state";
 import { Button } from '@mui/material';
+import useUndoRedo from './useUndoRedo';
 
 const buttonContainer: React.CSSProperties = {
 	flexDirection: 'row',
@@ -26,7 +26,7 @@ const buttonRight: React.CSSProperties = {
 
 const {fontFamily} = loadFont();
 
-const textStyle: React.CSSProperties = {
+const stateStyle: React.CSSProperties = {
 	fontWeight: 'bold',
 	fontFamily,
 	fontSize: 40,
@@ -36,44 +36,68 @@ const textStyle: React.CSSProperties = {
 
 export const Overlay: React.FC = () => {
 
-	const draggableContainer: React.CSSProperties = {
-		backgroundColor: 'white',
-		borderRadius: 25,
-		right: 200,
-		top: 100,
-		padding: 40,
-		width: 500,
-		height: 100,
-		alignSelf: 'center',
-		position: 'relative'
+	
+	interface InteractiveText {
+		T: string;
+		X: number;
+		Y: number;
 	}
 
-	const init = {text: "Change my Text" };
+	const getText = (): InteractiveText => {
+		return {
+			T: "Change me or Drag me",
+			X: 200,
+			Y: 100
+		}
+	};
 
-	const {
-		state: doc,
-		setState: setDoc,
-		resetState: resetDoc,
-		index: docStateIndex,
-		lastIndex: docStateLastIndex,
-		goBack: undoDoc,
-		goForward: redoDoc,
-	  } = useUndoableState(
-		init,
-		500 
-	  );
-	  const canUndo = docStateIndex > 0;
-	  const canRedo = docStateIndex < docStateLastIndex;
+	const {state, undo, redo, updatePresent} = useUndoRedo(getText());
+
+	const draggableContainer: React.CSSProperties = {
+			backgroundColor: 'white',
+			borderRadius: 25,
+			padding: 40,
+			width: 500,
+			height: 100,
+			alignSelf: 'center',
+			position: 'relative'
+		}
+
+	let startX = 0
+	let startY = 0
 
 	return (
 			<AbsoluteFill>
 				<div style={buttonContainer}>
-					<Button onClick={()=>undoDoc()} disabled={!canUndo} style={buttonLeft} variant="outlined">Undo</Button>
-					<Button onClick={()=>redoDoc()} disabled={!canRedo} style={buttonRight} variant="outlined">Redo</Button>
+					<Button onClick={()=>undo()} style={buttonLeft} variant="outlined">Undo</Button>
+					<Button onClick={()=>redo()} style={buttonRight} variant="outlined">Redo</Button>
 				</div>
-				<Draggable>
+				<Draggable onStart={(e, data) => {
+						// console.log("start", state.X, state.Y)
+						// console.log("start", data.x, data.y)
+						startX = data.x
+						startY = data.y
+					}} 
+					onStop={(e, data) => {			
+						// console.log("stop", state.X, state.Y)
+						// console.log("stop", data.x, data.y)
+						let deltaX = data.x - startX
+						let deltaY = data.y - startY
+
+						updatePresent({
+							T: state.T,
+							X: state.X + deltaX, 
+							Y: state.Y + deltaY, 
+						})
+				}} position={{x: state.X, y: state.Y}}>
 					<div style={draggableContainer}>
-					<Input style={textStyle} value={doc.text} onChange={(event) => setDoc({ text: event.target.value })}/>
+					<Input style={stateStyle} value={state.T} onChange={(event) => {
+						updatePresent({
+							T: event.target.value,
+							X: state.X,
+							Y: state.Y
+						})
+					}}/>
 					</div>
 				</Draggable>
 			</AbsoluteFill>
