@@ -1,7 +1,6 @@
 import {Player, PlayerRef} from '@remotion/player';
 import {MyComposition} from './Composition'
-// @ts-ignore
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 const App: React.FC = () => {
 	

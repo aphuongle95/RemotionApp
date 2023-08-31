@@ -13,7 +13,7 @@ export const MyComposition: React.FC<Props> = ({pauseVideo}) => {
 			durationInFrames={300}>
 				<MyVideo/>
 		</Sequence>
-		<Sequence from={10} durationInFrames={300}>
+		<Sequence durationInFrames={300}>
 			<Overlay pauseVideo={pauseVideo}></Overlay>
 		</Sequence>
 	  </>

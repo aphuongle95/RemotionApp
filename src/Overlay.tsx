@@ -8,7 +8,7 @@ import { Input } from '@mui/material';
 import { Button } from '@mui/material';
 import useUndoRedo from './useUndoRedo';
 
-
+// declare styles
 const buttonContainer: React.CSSProperties = {
 	flexDirection: 'row',
 	alignSelf: 'center',
@@ -25,14 +25,24 @@ const buttonRight: React.CSSProperties = {
 	background: 'white'
 }
 
-const {fontFamily} = loadFont();
+const draggableContainer: React.CSSProperties = {
+	backgroundColor: 'white',
+	borderRadius: 25,
+	padding: 40,
+	width: 500,
+	height: 100,
+	alignSelf: 'center',
+	position: 'relative'
+}
 
+const {fontFamily} = loadFont();
 const stateStyle: React.CSSProperties = {
 	fontWeight: 'bold',
 	fontFamily,
 	fontSize: 40,
 	color: '#4290F5',
 };
+
 
 type Props = {
 	pauseVideo: Function
@@ -52,21 +62,12 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 		Y: 100
 	};
 
+	// localStorage.clear();
 	const savedState = localStorage.getItem('text-state');
 	const initText = savedState != null ? JSON.parse(savedState) : defaultText;
 	const saveStatetoLocalStorage = (newState: InteractiveText) => localStorage.setItem('text-state', JSON.stringify(newState))
 
 	const {state, undo, redo, updatePresent} = useUndoRedo(()=>{return initText}, saveStatetoLocalStorage);
-
-	const draggableContainer: React.CSSProperties = {
-			backgroundColor: 'white',
-			borderRadius: 25,
-			padding: 40,
-			width: 500,
-			height: 100,
-			alignSelf: 'center',
-			position: 'relative'
-		}
 
 	let startX = 0
 	let startY = 0
@@ -86,15 +87,11 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 					<Button onClick={()=>{redo(); pauseVideo()}} style={buttonRight} variant="outlined">Redo</Button>
 				</div>
 				<Draggable onStart={(e, data) => {
-						// console.log("start", state.X, state.Y)
-						// console.log("start", data.x, data.y)
+						pauseVideo()
 						startX = data.x
 						startY = data.y
-						pauseVideo()
 					}} 
 					onStop={(e, data) => {			
-						// console.log("stop", state.X, state.Y)
-						// console.log("stop", data.x, data.y)
 						let deltaX = data.x - startX
 						let deltaY = data.y - startY
 						updatePresent({

@@ -1,52 +1,46 @@
 import { useState } from "react";
 
-// @ts-ignore
-function useUndoRedo(initialState, saveStatetoLocalStorage) {
-  const [past, setPast] = useState([]);
+function useUndoRedo(initialState: any, saveStatetoLocalStorage: any) {
+  const [past, setPast] = useState<any[]>([]);
   const [present, setPresent] = useState(initialState);
-  const [future, setFuture] = useState([]);
+  const [future, setFuture] = useState<any[]>([]);
 
   const undo = () => {
     if (past.length === 0) {
-      console.log("no past")
+      console.log("no past");
       return;
     }
     const newPast = [...past];
     const newPresent = newPast.pop();
-    // console.log(newPresent)
-    // console.log(future)
 
     setPast(newPast);
-    // @ts-ignore
     setFuture([present, ...future]);
     setPresent(newPresent);
-    saveStatetoLocalStorage(newPresent)
+    saveStatetoLocalStorage(newPresent);
   };
 
   const redo = () => {
     if (future.length === 0) {
-      console.log("no future")
+      console.log("no future");
       return;
     }
 
     const newFuture = [...future];
     const newPresent = newFuture.shift();
 
-    // @ts-ignore
     setPast([...past, present]);
     setFuture(newFuture);
     setPresent(newPresent);
-    saveStatetoLocalStorage(newPresent)
+    saveStatetoLocalStorage(newPresent);
   };
 
-  // @ts-ignore
-  const updatePresent = (newState) => {
-    console.log("new")
-    // @ts-ignore
+  const updatePresent = (newState: any) => {
+    console.log("new");
+
     setPast([...past, present]);
     setPresent(newState);
     setFuture([]);
-    saveStatetoLocalStorage(newState)
+    saveStatetoLocalStorage(newState);
   };
 
   return { state: present, undo, redo, updatePresent };
