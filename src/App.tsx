@@ -8,7 +8,7 @@ const App: React.FC = () => {
 	const playerRef = useRef<PlayerRef>(null);
 
 	// pause on text update (edit or move)
-	const handleTextUpdate = () => {
+	const pauseVideo = () => {
 		if (playerRef.current) {
 			playerRef.current.pause()
 		}
@@ -27,7 +27,7 @@ const App: React.FC = () => {
 				compositionWidth={1920}
 				compositionHeight={1080}
 				inputProps={{
-					"handleTextUpdate": handleTextUpdate
+					"pauseVideo": pauseVideo
 				}}
 			/>
 		</div>

@@ -3,10 +3,10 @@ import {Overlay} from './Overlay';
 import {MyVideo} from './Video';
 
 type Props = {
-	handleTextUpdate: Function
+	pauseVideo: Function
 }
 
-export const MyComposition: React.FC<Props> = ({handleTextUpdate}) => {
+export const MyComposition: React.FC<Props> = ({pauseVideo}) => {
 	return (
 	  <>
 		<Sequence 
@@ -14,7 +14,7 @@ export const MyComposition: React.FC<Props> = ({handleTextUpdate}) => {
 				<MyVideo/>
 		</Sequence>
 		<Sequence from={10} durationInFrames={300}>
-			<Overlay handleTextUpdate={handleTextUpdate}></Overlay>
+			<Overlay pauseVideo={pauseVideo}></Overlay>
 		</Sequence>
 	  </>
 	);

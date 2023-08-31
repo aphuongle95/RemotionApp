@@ -35,10 +35,10 @@ const stateStyle: React.CSSProperties = {
 };
 
 type Props = {
-	handleTextUpdate: Function
+	pauseVideo: Function
 }
 
-export const Overlay: React.FC<Props> = ({handleTextUpdate}) => {
+export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 	
 	interface InteractiveText {
 		T: string;
@@ -46,15 +46,17 @@ export const Overlay: React.FC<Props> = ({handleTextUpdate}) => {
 		Y: number;
 	}
 
-	const getText = (): InteractiveText => {
-		return {
-			T: "Change me or Drag me",
-			X: 200,
-			Y: 100
-		}
+	const defaultText: InteractiveText = {
+		T: "Change me or Drag me",
+		X: 200,
+		Y: 100
 	};
 
-	const {state, undo, redo, updatePresent} = useUndoRedo(getText());
+	const savedState = localStorage.getItem('text-state');
+	const initText = savedState != null ? JSON.parse(savedState) : defaultText;
+	const saveStatetoLocalStorage = (newState: InteractiveText) => localStorage.setItem('text-state', JSON.stringify(newState))
+
+	const {state, undo, redo, updatePresent} = useUndoRedo(()=>{return initText}, saveStatetoLocalStorage);
 
 	const draggableContainer: React.CSSProperties = {
 			backgroundColor: 'white',
@@ -80,15 +82,15 @@ export const Overlay: React.FC<Props> = ({handleTextUpdate}) => {
 	return (
 			<AbsoluteFill>
 				<div style={buttonContainer}>
-					<Button onClick={()=>{undo(); handleTextUpdate()}} style={buttonLeft} variant="outlined">Undo</Button>
-					<Button onClick={()=>{redo(); handleTextUpdate()}} style={buttonRight} variant="outlined">Redo</Button>
+					<Button onClick={()=>{undo(); pauseVideo()}} style={buttonLeft} variant="outlined">Undo</Button>
+					<Button onClick={()=>{redo(); pauseVideo()}} style={buttonRight} variant="outlined">Redo</Button>
 				</div>
 				<Draggable onStart={(e, data) => {
 						// console.log("start", state.X, state.Y)
 						// console.log("start", data.x, data.y)
 						startX = data.x
 						startY = data.y
-						handleTextUpdate()
+						pauseVideo()
 					}} 
 					onStop={(e, data) => {			
 						// console.log("stop", state.X, state.Y)
@@ -108,7 +110,7 @@ export const Overlay: React.FC<Props> = ({handleTextUpdate}) => {
 							X: state.X,
 							Y: state.Y
 						})
-						handleTextUpdate()
+						pauseVideo()
 					}}/>
 					</div>
 				</Draggable>

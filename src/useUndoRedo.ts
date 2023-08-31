@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // @ts-ignore
-function useUndoRedo(initialState) {
+function useUndoRedo(initialState, saveStatetoLocalStorage) {
   const [past, setPast] = useState([]);
   const [present, setPresent] = useState(initialState);
   const [future, setFuture] = useState([]);
@@ -13,13 +13,14 @@ function useUndoRedo(initialState) {
     }
     const newPast = [...past];
     const newPresent = newPast.pop();
-    console.log(newPresent)
-    console.log(future)
+    // console.log(newPresent)
+    // console.log(future)
 
     setPast(newPast);
     // @ts-ignore
     setFuture([present, ...future]);
     setPresent(newPresent);
+    saveStatetoLocalStorage(newPresent)
   };
 
   const redo = () => {
@@ -35,6 +36,7 @@ function useUndoRedo(initialState) {
     setPast([...past, present]);
     setFuture(newFuture);
     setPresent(newPresent);
+    saveStatetoLocalStorage(newPresent)
   };
 
   // @ts-ignore
@@ -44,6 +46,7 @@ function useUndoRedo(initialState) {
     setPast([...past, present]);
     setPresent(newState);
     setFuture([]);
+    saveStatetoLocalStorage(newState)
   };
 
   return { state: present, undo, redo, updatePresent };
