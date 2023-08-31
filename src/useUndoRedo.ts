@@ -23,7 +23,10 @@ function useUndoRedo(initialState) {
   };
 
   const redo = () => {
-    if (future.length === 0) return;
+    if (future.length === 0) {
+      console.log("no future")
+      return;
+    }
 
     const newFuture = [...future];
     const newPresent = newFuture.shift();
@@ -36,7 +39,7 @@ function useUndoRedo(initialState) {
 
   // @ts-ignore
   const updatePresent = (newState) => {
-    console.log("new", newState)
+    console.log("new")
     // @ts-ignore
     setPast([...past, present]);
     setPresent(newState);

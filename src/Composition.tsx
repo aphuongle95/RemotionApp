@@ -2,7 +2,11 @@ import {Sequence} from 'remotion';
 import {Overlay} from './Overlay';
 import {MyVideo} from './Video';
 
-export const MyComposition = () => {
+type Props = {
+	handleTextUpdate: Function
+}
+
+export const MyComposition: React.FC<Props> = ({handleTextUpdate}) => {
 	return (
 	  <>
 		<Sequence 
@@ -10,7 +14,7 @@ export const MyComposition = () => {
 				<MyVideo/>
 		</Sequence>
 		<Sequence from={10} durationInFrames={300}>
-			<Overlay />
+			<Overlay handleTextUpdate={handleTextUpdate}></Overlay>
 		</Sequence>
 	  </>
 	);

@@ -34,8 +34,11 @@ const stateStyle: React.CSSProperties = {
 	color: '#4290F5',
 };
 
+type Props = {
+	handleTextUpdate: Function
+}
 
-export const Overlay: React.FC = () => {
+export const Overlay: React.FC<Props> = ({handleTextUpdate}) => {
 	
 	interface InteractiveText {
 		T: string;
@@ -77,21 +80,21 @@ export const Overlay: React.FC = () => {
 	return (
 			<AbsoluteFill>
 				<div style={buttonContainer}>
-					<Button onClick={()=>undo()} style={buttonLeft} variant="outlined">Undo</Button>
-					<Button onClick={()=>redo()} style={buttonRight} variant="outlined">Redo</Button>
+					<Button onClick={()=>{undo(); handleTextUpdate()}} style={buttonLeft} variant="outlined">Undo</Button>
+					<Button onClick={()=>{redo(); handleTextUpdate()}} style={buttonRight} variant="outlined">Redo</Button>
 				</div>
 				<Draggable onStart={(e, data) => {
 						// console.log("start", state.X, state.Y)
 						// console.log("start", data.x, data.y)
 						startX = data.x
 						startY = data.y
+						handleTextUpdate()
 					}} 
 					onStop={(e, data) => {			
 						// console.log("stop", state.X, state.Y)
 						// console.log("stop", data.x, data.y)
 						let deltaX = data.x - startX
 						let deltaY = data.y - startY
-
 						updatePresent({
 							T: state.T,
 							X: state.X + deltaX, 
@@ -105,6 +108,7 @@ export const Overlay: React.FC = () => {
 							X: state.X,
 							Y: state.Y
 						})
+						handleTextUpdate()
 					}}/>
 					</div>
 				</Draggable>
