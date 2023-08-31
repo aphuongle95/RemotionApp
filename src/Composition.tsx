@@ -1,6 +1,6 @@
 import {Sequence} from 'remotion';
-import {Overlay} from './Overlay';
 import {MyVideo} from './Video';
+import Overlay from './Overlay';
 
 type Props = {
 	pauseVideo: Function

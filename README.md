@@ -28,7 +28,4 @@ npm start
 - [x] pause video on edit / move
 - [x] save state locally 
 - [x] show last state on browser refresh
-- known issues: 
-    - text jump:
-        - description: when we move the text box during playing of the video, text will jump after mouse release. 
-        - possible cause: maybe it's because that draggable component access dom component via findDom
+- [x] avoid overlay text rerender when video paused

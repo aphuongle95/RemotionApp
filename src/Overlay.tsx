@@ -1,7 +1,7 @@
 import {
 	AbsoluteFill
 } from 'remotion';
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import {loadFont} from '@remotion/google-fonts/Roboto';
 import Draggable, { ControlPosition } from "react-draggable";
 import { Input } from '@mui/material';
@@ -15,14 +15,13 @@ const buttonContainer: React.CSSProperties = {
 	position: 'relative'
 }
 
-const buttonLeft: React.CSSProperties = {
-	color: 'orange',
-	background: 'white'
-}
-
-const buttonRight: React.CSSProperties = {
-	color: 'purple',
-	background: 'white'
+const button: React.CSSProperties = {
+	color: 'black',
+	background: 'white',
+	width: 100,
+	margin: 10,
+	fontSize: 15,
+	fontStyle: 'bold'
 }
 
 const draggableContainer: React.CSSProperties = {
@@ -48,7 +47,8 @@ type Props = {
 	pauseVideo: Function
 }
 
-export const Overlay: React.FC<Props> = ({pauseVideo}) => {
+
+const Overlay: React.FC<Props> = ({pauseVideo}) => {
 	
 	interface InteractiveText {
 		T: string;
@@ -62,7 +62,7 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 		Y: 100
 	};
 
-	// localStorage.clear();
+	localStorage.clear();
 	const savedState = localStorage.getItem('text-state');
 	const initText = savedState != null ? JSON.parse(savedState) : defaultText;
 	const saveStatetoLocalStorage = (newState: InteractiveText) => localStorage.setItem('text-state', JSON.stringify(newState))
@@ -71,7 +71,8 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 
 	let startX = 0
 	let startY = 0
-	
+
+
 	const position: ControlPosition = useMemo( () => {
 		return {x: state.X, y: state.Y}
 	}, [state.X, state.Y])
@@ -83,13 +84,13 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 	return (
 			<AbsoluteFill>
 				<div style={buttonContainer}>
-					<Button onClick={()=>{undo(); pauseVideo()}} style={buttonLeft} variant="outlined">Undo</Button>
-					<Button onClick={()=>{redo(); pauseVideo()}} style={buttonRight} variant="outlined">Redo</Button>
+					<Button onClick={()=>{undo(); pauseVideo()}} style={button} variant="outlined">Undo</Button>
+					<Button onClick={()=>{redo(); pauseVideo()}} style={button} variant="outlined">Redo</Button>
 				</div>
 				<Draggable onStart={(e, data) => {
-						pauseVideo()
 						startX = data.x
 						startY = data.y
+						pauseVideo() 
 					}} 
 					onStop={(e, data) => {			
 						let deltaX = data.x - startX
@@ -99,6 +100,7 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 							X: state.X + deltaX, 
 							Y: state.Y + deltaY, 
 						})
+						
 				}} position={position}>
 					<div style={draggableContainer}>
 					<Input style={stateStyle} value={text} onChange={(event) => {
@@ -114,3 +116,4 @@ export const Overlay: React.FC<Props> = ({pauseVideo}) => {
 			</AbsoluteFill>
 	);
 };
+export default memo(Overlay)
