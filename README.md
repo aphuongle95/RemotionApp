@@ -1,6 +1,10 @@
 # Remotion player with interactive text
 
-Welcome to my Remotion project!
+Welcome to my Remotion project! In this project, I created a remotion player, with a text that the user can interact with; e.g. drag or change the text.
+This is part of me refreshing my knowledge about React / Remotion.
+
+## Demo
+Please checkout https://codesandbox.io/s/github/aphuongle95/my_remotion_app to have a preview 
 
 ## Commands
 
